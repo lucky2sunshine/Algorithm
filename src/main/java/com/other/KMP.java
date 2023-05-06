@@ -27,7 +27,6 @@ public class KMP {
 
     public static int[] getNextArray(String str){
         char[] strs = str.toCharArray();
-        assert strs.length > 0;
         if(strs.length == 1) return new int[]{-1};
         int[] next = new int[strs.length];
         next[0] = -1;
@@ -36,8 +35,8 @@ public class KMP {
         int prefix = 0;
         while (cur < strs.length){
             if(strs[cur - 1] == strs[prefix]) next[cur++] = ++prefix;
-            else if(prefix > 0) prefix = next[prefix];
-            else next[cur++] = 0;
+            else if(prefix == 0) next[cur++] = 0;
+            else prefix = next[prefix];
         }
         return next;
     }

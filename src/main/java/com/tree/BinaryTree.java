@@ -81,11 +81,26 @@ public class BinaryTree {
         if(root == null) return;
         Stack<Node> stack = new Stack<Node>();
         stack.push(root);
+
         while(!stack.isEmpty()){
             Node cur = stack.pop();
             System.out.println(cur.val);
             if(cur.right != null) stack.push(cur.right);
             if(cur.left != null) stack.push(cur.left);
+        }
+    }
+
+    public static void preOrder(Node root){
+        if(root == null) return;
+        Node cur = root;
+        Stack<Node> stack = new Stack<>();
+        stack.push(cur);
+
+        while(!stack.isEmpty()){
+            cur = stack.pop();
+            System.out.println(cur.val);
+            if (cur.right != null) stack.push(cur.right);
+            if (cur.left != null) stack.push(cur.left);
         }
     }
 
@@ -112,6 +127,28 @@ public class BinaryTree {
         }
     }
 
+    // 中序遍历
+    public static void inOrder(Node root){
+        if(root == null) return;
+        Node cur = root;
+        Stack<Node> stack = new Stack<>();
+        stack.push(cur);
+
+        while(!stack.isEmpty()){
+            if(cur.left != null){
+                stack.push(cur.left);
+                cur = cur.left;
+                continue;
+            }
+            cur = stack.pop();
+            System.out.println(cur.val);
+            if(cur.right != null){
+                stack.push(cur.right);
+                cur = cur.right;
+            }
+        }
+    }
+
     // 后序遍历
     public static void postOrderTraversal2(Node root){
         if(root == null) return;
@@ -120,6 +157,24 @@ public class BinaryTree {
         stack.push(root);
         while(!stack.isEmpty()){
             Node cur = stack.pop();
+            collect.push(cur);
+            if(cur.left != null) stack.push(cur.left);
+            if(cur.right != null) stack.push(cur.right);
+        }
+        while(!collect.isEmpty()){
+            System.out.println(collect.pop().val);
+        }
+    }
+
+    public static void postOrder(Node root){
+        if(root == null) return;
+        Node cur = root;
+        Stack<Node> stack = new Stack<>();
+        stack.push(cur);
+
+        Stack<Node> collect = new Stack<>();
+        while(!stack.isEmpty()){
+            cur = stack.pop();
             collect.push(cur);
             if(cur.left != null) stack.push(cur.left);
             if(cur.right != null) stack.push(cur.right);
@@ -138,6 +193,34 @@ public class BinaryTree {
             System.out.println(cur.val);
             if(cur.left != null) queue.add(cur.left);
             if(cur.right != null) queue.add(cur.right);
+        }
+    }
+
+    public static void level(Node root){
+        if(root == null) return;
+        Node cur = root;
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(cur);
+
+        Node curEnd = root;
+        Node nextEnd = null;
+
+        while (!queue.isEmpty()){
+            cur = queue.poll();
+            System.out.print(cur.val + " ");
+            if(cur.left != null) {
+                queue.add(cur.left);
+                nextEnd = cur.left;
+            }
+            if(cur.right != null){
+                queue.add(cur.right);
+                nextEnd = cur.right;
+            }
+
+            if(cur == curEnd){ // 一层结束
+                curEnd = nextEnd;
+                System.out.println();
+            }
         }
     }
 
@@ -170,6 +253,41 @@ public class BinaryTree {
         return max;
     }
 
+    public static void maxWidth(Node root){
+        if(root == null) return;
+        Node cur = root;
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(cur);
+
+        Node curEnd = root;
+        Node nextEnd = null;
+
+        int curLevelNodes = 0; // 1
+        int max = Integer.MIN_VALUE; // 2
+
+        while (!queue.isEmpty()){
+            cur = queue.poll();
+            System.out.print(cur.val + " ");
+            curLevelNodes++; // 3
+            if(cur.left != null) {
+                queue.add(cur.left);
+                nextEnd = cur.left;
+            }
+            if(cur.right != null){
+                queue.add(cur.right);
+                nextEnd = cur.right;
+            }
+
+            if(cur == curEnd){ // 一层结束
+                curEnd = nextEnd;
+                max = Math.max(max, curLevelNodes); // 4
+                curLevelNodes = 0; // 5
+                System.out.println();
+            }
+        }
+        System.out.println(max); // 6
+    }
+
     public static int getMaxDepth(Node root){
         if(root == null) return 0;
         int left_depth = getMaxDepth(root.left);
@@ -185,8 +303,7 @@ public class BinaryTree {
     }
 
     public static void main(String[] args) {
-        generateBinaryTree(new int[]{1,2,3,4,5,6,7});
-        System.out.println(getMinDepth(root));
+        System.out.println(new BinaryTree().hashCode());
     }
 
 }
